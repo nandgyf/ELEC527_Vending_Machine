@@ -1,5 +1,5 @@
 $date
-	Thu Mar  2 15:46:41 2023
+	Sun Apr 16 17:40:06 2023
 $end
 $version
 	ModelSim Version 10.7
@@ -12,10 +12,10 @@ $scope module top_module_tb $end
 $var reg 1 ! in_clka $end
 $var reg 1 " in_clkb $end
 $var reg 1 # in_restart $end
-$var reg 8 $ in_inserted_5 [7:0] $end
-$var reg 8 % in_inserted_1 [7:0] $end
-$var reg 8 & in_inserted_05 [7:0] $end
-$var reg 8 ' in_inserted_025 [7:0] $end
+$var reg 1 $ in_inserted_5 $end
+$var reg 1 % in_inserted_1 $end
+$var reg 1 & in_inserted_05 $end
+$var reg 1 ' in_inserted_025 $end
 $var reg 1 ( in_sel_a $end
 $var reg 1 ) in_sel_b $end
 $var reg 1 * in_sel_c $end
@@ -69,44 +69,16 @@ $var wire 1 W cmd [0] $end
 $var wire 1 X in_clka $end
 $var wire 1 Y in_clkb $end
 $var wire 1 Z in_restart $end
-$var wire 1 [ in_inserted_5 [7] $end
-$var wire 1 \ in_inserted_5 [6] $end
-$var wire 1 ] in_inserted_5 [5] $end
-$var wire 1 ^ in_inserted_5 [4] $end
-$var wire 1 _ in_inserted_5 [3] $end
-$var wire 1 ` in_inserted_5 [2] $end
-$var wire 1 a in_inserted_5 [1] $end
-$var wire 1 b in_inserted_5 [0] $end
-$var wire 1 c in_inserted_1 [7] $end
-$var wire 1 d in_inserted_1 [6] $end
-$var wire 1 e in_inserted_1 [5] $end
-$var wire 1 f in_inserted_1 [4] $end
-$var wire 1 g in_inserted_1 [3] $end
-$var wire 1 h in_inserted_1 [2] $end
-$var wire 1 i in_inserted_1 [1] $end
-$var wire 1 j in_inserted_1 [0] $end
-$var wire 1 k in_inserted_05 [7] $end
-$var wire 1 l in_inserted_05 [6] $end
-$var wire 1 m in_inserted_05 [5] $end
-$var wire 1 n in_inserted_05 [4] $end
-$var wire 1 o in_inserted_05 [3] $end
-$var wire 1 p in_inserted_05 [2] $end
-$var wire 1 q in_inserted_05 [1] $end
-$var wire 1 r in_inserted_05 [0] $end
-$var wire 1 s in_inserted_025 [7] $end
-$var wire 1 t in_inserted_025 [6] $end
-$var wire 1 u in_inserted_025 [5] $end
-$var wire 1 v in_inserted_025 [4] $end
-$var wire 1 w in_inserted_025 [3] $end
-$var wire 1 x in_inserted_025 [2] $end
-$var wire 1 y in_inserted_025 [1] $end
-$var wire 1 z in_inserted_025 [0] $end
-$var wire 1 { in_sel_a $end
-$var wire 1 | in_sel_b $end
-$var wire 1 } in_sel_c $end
-$var wire 1 ~ in_sel_d $end
-$var wire 1 !! in_next $end
-$var wire 1 "! in_finish $end
+$var wire 1 [ in_inserted_5 $end
+$var wire 1 \ in_inserted_1 $end
+$var wire 1 ] in_inserted_05 $end
+$var wire 1 ^ in_inserted_025 $end
+$var wire 1 _ in_sel_a $end
+$var wire 1 ` in_sel_b $end
+$var wire 1 a in_sel_c $end
+$var wire 1 b in_sel_d $end
+$var wire 1 c in_next $end
+$var wire 1 d in_finish $end
 $var wire 1 . out_change [15] $end
 $var wire 1 / out_change [14] $end
 $var wire 1 0 out_change [13] $end
@@ -149,30 +121,30 @@ $var wire 1 T out_state [1] $end
 $var wire 1 U out_state [0] $end
 
 $scope module main_FSM_dut $end
-$var parameter 32 #! SIZE $end
-$var parameter 2 $! IDLE $end
-$var parameter 2 %! START $end
-$var parameter 2 &! SITEM $end
-$var parameter 2 '! SMONEY $end
-$var parameter 2 (! SITEM_CMD $end
-$var parameter 2 )! SMONEY_CMD $end
-$var parameter 2 *! CLEAR_CMD $end
-$var parameter 2 +! START_CMD $end
+$var parameter 32 e SIZE $end
+$var parameter 2 f IDLE $end
+$var parameter 2 g START $end
+$var parameter 2 h SITEM $end
+$var parameter 2 i SMONEY $end
+$var parameter 2 j SITEM_CMD $end
+$var parameter 2 k SMONEY_CMD $end
+$var parameter 2 l CLEAR_CMD $end
+$var parameter 2 m START_CMD $end
 $var wire 1 X in_clka $end
 $var wire 1 Y in_clkb $end
-$var wire 1 !! in_next $end
-$var wire 1 "! in_finish $end
+$var wire 1 c in_next $end
+$var wire 1 d in_finish $end
 $var wire 1 Z in_restart $end
-$var reg 2 ,! out_state [1:0] $end
-$var reg 2 -! out_cmd [1:0] $end
-$var wire 1 .! temp_out_state [1] $end
-$var wire 1 /! temp_out_state [0] $end
-$var reg 2 0! next_out_state [1:0] $end
+$var reg 2 n out_state [1:0] $end
+$var reg 2 o out_cmd [1:0] $end
+$var wire 1 p temp_out_state [1] $end
+$var wire 1 q temp_out_state [0] $end
+$var reg 2 r next_out_state [1:0] $end
 
 $scope function fsm_function $end
-$var reg 2 1! fsm_function [1:0] $end
-$var reg 2 2! out_state [1:0] $end
-$var reg 1 3! in_next $end
+$var reg 2 s fsm_function [1:0] $end
+$var reg 2 t out_state [1:0] $end
+$var reg 1 u in_next $end
 $upscope $end
 
 $scope begin FSM_SEQ $end
@@ -183,55 +155,27 @@ $upscope $end
 $upscope $end
 
 $scope module dp_dut $end
-$var parameter 2 4! SITEM_CMD $end
-$var parameter 2 5! SMONEY_CMD $end
-$var parameter 2 6! CLEAR_CMD $end
-$var parameter 2 7! START_CMD $end
-$var parameter 16 8! ITEM_PRICE_A $end
-$var parameter 16 9! ITEM_PRICE_B $end
-$var parameter 16 :! ITEM_PRICE_C $end
-$var parameter 16 ;! ITEM_PRICE_D $end
+$var parameter 2 v SITEM_CMD $end
+$var parameter 2 w SMONEY_CMD $end
+$var parameter 2 x CLEAR_CMD $end
+$var parameter 2 y START_CMD $end
+$var parameter 16 z ITEM_PRICE_A $end
+$var parameter 16 { ITEM_PRICE_B $end
+$var parameter 16 | ITEM_PRICE_C $end
+$var parameter 16 } ITEM_PRICE_D $end
 $var wire 1 X in_clka $end
 $var wire 1 Y in_clkb $end
 $var wire 1 Z in_restart $end
 $var wire 1 V in_cmd [1] $end
 $var wire 1 W in_cmd [0] $end
-$var wire 1 [ in_inserted_5 [7] $end
-$var wire 1 \ in_inserted_5 [6] $end
-$var wire 1 ] in_inserted_5 [5] $end
-$var wire 1 ^ in_inserted_5 [4] $end
-$var wire 1 _ in_inserted_5 [3] $end
-$var wire 1 ` in_inserted_5 [2] $end
-$var wire 1 a in_inserted_5 [1] $end
-$var wire 1 b in_inserted_5 [0] $end
-$var wire 1 c in_inserted_1 [7] $end
-$var wire 1 d in_inserted_1 [6] $end
-$var wire 1 e in_inserted_1 [5] $end
-$var wire 1 f in_inserted_1 [4] $end
-$var wire 1 g in_inserted_1 [3] $end
-$var wire 1 h in_inserted_1 [2] $end
-$var wire 1 i in_inserted_1 [1] $end
-$var wire 1 j in_inserted_1 [0] $end
-$var wire 1 k in_inserted_05 [7] $end
-$var wire 1 l in_inserted_05 [6] $end
-$var wire 1 m in_inserted_05 [5] $end
-$var wire 1 n in_inserted_05 [4] $end
-$var wire 1 o in_inserted_05 [3] $end
-$var wire 1 p in_inserted_05 [2] $end
-$var wire 1 q in_inserted_05 [1] $end
-$var wire 1 r in_inserted_05 [0] $end
-$var wire 1 s in_inserted_025 [7] $end
-$var wire 1 t in_inserted_025 [6] $end
-$var wire 1 u in_inserted_025 [5] $end
-$var wire 1 v in_inserted_025 [4] $end
-$var wire 1 w in_inserted_025 [3] $end
-$var wire 1 x in_inserted_025 [2] $end
-$var wire 1 y in_inserted_025 [1] $end
-$var wire 1 z in_inserted_025 [0] $end
-$var wire 1 { in_sel_a $end
-$var wire 1 | in_sel_b $end
-$var wire 1 } in_sel_c $end
-$var wire 1 ~ in_sel_d $end
+$var wire 1 [ in_inserted_5 $end
+$var wire 1 \ in_inserted_1 $end
+$var wire 1 ] in_inserted_05 $end
+$var wire 1 ^ in_inserted_025 $end
+$var wire 1 _ in_sel_a $end
+$var wire 1 ` in_sel_b $end
+$var wire 1 a in_sel_c $end
+$var wire 1 b in_sel_d $end
 $var wire 1 . out_change [15] $end
 $var wire 1 / out_change [14] $end
 $var wire 1 0 out_change [13] $end
@@ -252,35 +196,35 @@ $var wire 1 > out_stock_a $end
 $var wire 1 ? out_stock_b $end
 $var wire 1 @ out_stock_c $end
 $var wire 1 A out_stock_d $end
-$var reg 1 <! out_csel_a $end
-$var reg 1 =! out_csel_b $end
-$var reg 1 >! out_csel_c $end
-$var reg 1 ?! out_csel_d $end
-$var reg 8 @! out_change_1 [7:0] $end
-$var reg 1 A! out_change_05 $end
-$var reg 1 B! out_change_025 $end
-$var reg 1 C! out_spit_a $end
-$var reg 1 D! out_spit_b $end
-$var reg 1 E! out_spit_c $end
-$var reg 1 F! out_spit_d $end
-$var reg 8 G! item_a_num [7:0] $end
-$var reg 8 H! item_b_num [7:0] $end
-$var reg 8 I! item_c_num [7:0] $end
-$var reg 8 J! item_d_num [7:0] $end
-$var wire 1 K! total_price [15] $end
-$var wire 1 L! total_price [14] $end
-$var wire 1 M! total_price [13] $end
-$var wire 1 N! total_price [12] $end
-$var wire 1 O! total_price [11] $end
-$var wire 1 P! total_price [10] $end
-$var wire 1 Q! total_price [9] $end
-$var wire 1 R! total_price [8] $end
-$var wire 1 S! total_price [7] $end
-$var wire 1 T! total_price [6] $end
-$var wire 1 U! total_price [5] $end
-$var wire 1 V! total_price [4] $end
-$var wire 1 W! total_price [3] $end
-$var wire 1 X! total_price [2] $end
-$var wire 1 Y! total_price [1] $end
-$var wire 1 Z! total_price [0] $end
-$var reg 16 [! inserted_money [15:0] $end
+$var reg 1 ~ out_csel_a $end
+$var reg 1 !! out_csel_b $end
+$var reg 1 "! out_csel_c $end
+$var reg 1 #! out_csel_d $end
+$var reg 8 $! out_change_1 [7:0] $end
+$var reg 1 %! out_change_05 $end
+$var reg 1 &! out_change_025 $end
+$var reg 1 '! out_spit_a $end
+$var reg 1 (! out_spit_b $end
+$var reg 1 )! out_spit_c $end
+$var reg 1 *! out_spit_d $end
+$var reg 8 +! item_a_num [7:0] $end
+$var reg 8 ,! item_b_num [7:0] $end
+$var reg 8 -! item_c_num [7:0] $end
+$var reg 8 .! item_d_num [7:0] $end
+$var wire 1 /! total_price [15] $end
+$var wire 1 0! total_price [14] $end
+$var wire 1 1! total_price [13] $end
+$var wire 1 2! total_price [12] $end
+$var wire 1 3! total_price [11] $end
+$var wire 1 4! total_price [10] $end
+$var wire 1 5! total_price [9] $end
+$var wire 1 6! total_price [8] $end
+$var wire 1 7! total_price [7] $end
+$var wire 1 8! total_price [6] $end
+$var wire 1 9! total_price [5] $end
+$var wire 1 :! total_price [4] $end
+$var wire 1 ;! total_price [3] $end
+$var wire 1 <! total_price [2] $end
+$var wire 1 =! total_price [1] $end
+$var wire 1 >! total_price [0] $end
+$var reg 16 ?! inserted_money [15:0] $end

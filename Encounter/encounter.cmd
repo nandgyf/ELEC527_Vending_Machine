@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Encounter Command Logging File                     
-#  Created on Thu Mar  2 16:43:15 2023                
+#  Created on Mon Apr 17 00:49:24 2023                
 #                                                     
 #######################################################
 
@@ -55,4 +55,3 @@ setStreamOutMode -snapToMGrid true -supportPathType4 false
 streamOut final.gds -mapFile /clear/apps/osu/soc/cadence/flow/ami05/gds2_encounter.map -libName DesignLib -units 100 -merge /clear/apps/osu/soc/cadence/lib/source/gds2/osu05_stdcells.gds2 -mode ALL
 saveNetlist final.v
 saveDesign top_module.enc
-win

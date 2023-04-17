@@ -37,10 +37,10 @@ input wire in_clka;
 input wire in_clkb;
 input wire in_restart;
 
-input wire [7:0] in_inserted_5;
-input wire [7:0] in_inserted_1;
-input wire [7:0] in_inserted_05;
-input wire [7:0] in_inserted_025;
+input wire in_inserted_5;
+input wire in_inserted_1;
+input wire in_inserted_05;
+input wire in_inserted_025;
 
 input wire in_sel_a;
 input wire in_sel_b;

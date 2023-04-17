@@ -16,10 +16,10 @@ input wire in_clka, in_clkb, in_restart;
 // Commands from FSM
 input wire [1:0] in_cmd;
 // The status of inserted coins
-input wire [7:0] in_inserted_5;
-input wire [7:0] in_inserted_1;
-input wire [7:0] in_inserted_05;
-input wire [7:0] in_inserted_025;
+input wire in_inserted_5;
+input wire in_inserted_1;
+input wire in_inserted_05;
+input wire in_inserted_025;
 // The status of selected items
 input wire in_sel_a;
 input wire in_sel_b;
@@ -85,19 +85,19 @@ begin
       inserted_money <= 0;
    end else if (in_cmd == START_CMD) begin
       if (in_sel_a)
-         out_csel_a <= (!out_stock_a) ? 0 : in_sel_a;
+         out_csel_a <= (!out_stock_a) ? 0 : !out_csel_a;
       else
          out_csel_a <= out_csel_a;   
       if (in_sel_b)
-         out_csel_b <= (!out_stock_b) ? 0 : in_sel_b;
+         out_csel_b <= (!out_stock_b) ? 0 : !out_csel_b;
       else
          out_csel_b <= out_csel_b;  
       if (in_sel_c)
-         out_csel_c <= (!out_stock_c) ? 0 : in_sel_c;
+         out_csel_c <= (!out_stock_c) ? 0 : !out_csel_c;
       else
          out_csel_c <= out_csel_c;  
       if (in_sel_d)
-         out_csel_d <= (!out_stock_d) ? 0 : in_sel_d;
+         out_csel_d <= (!out_stock_d) ? 0 : !out_csel_d;
       else
          out_csel_d <= out_csel_d; 
       inserted_money <= inserted_money + (in_inserted_5 << 3) + (in_inserted_5<<5) + 
@@ -128,8 +128,20 @@ begin
          item_d_num <= item_d_num - out_csel_d;
          end
    end else if (in_cmd == SMONEY_CMD) begin
+         out_spit_a <= out_csel_a;
+         out_spit_b <= out_csel_b;
+         out_spit_c <= out_csel_c;
+         out_spit_d <= out_csel_d;
+         out_csel_a <= 0;
+         out_csel_b <= 0;
+         out_csel_c <= 0;
+         out_csel_d <= 0;
+         item_a_num <= item_a_num - out_csel_a;
+         item_b_num <= item_b_num - out_csel_b;
+         item_c_num <= item_c_num - out_csel_c;
+         item_d_num <= item_d_num - out_csel_d;
          inserted_money <= 0;
-         out_change_1 <= out_change[15:3];
+         out_change_1 <= out_change[15] ? 0:out_change[15:3];
          out_change_05 <= out_change[2];
          out_change_025 <= out_change[1];
       end
