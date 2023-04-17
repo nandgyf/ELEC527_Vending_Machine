@@ -9,6 +9,21 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPalette, QColor, QPixmap, QFont
 
+# 定点数转十进制
+def fixed_point_to_decimal(binary_string):
+    # 获取二进制数的整数部分和小数部分
+    integer_part, decimal_part = binary_string[:13], binary_string[-3:]
+    # 将整数部分转换成十进制数
+    integer = int(integer_part, 2)
+    # 将小数部分转换成十进制数
+    decimal = int(decimal_part[0])*0.5 + int(decimal_part[1])*0.25
+    # 返回整数部分和小数部分相加的结果
+    if(binary_string[0]=='1'):
+        ret = integer + decimal - 8192
+    else:
+        ret = integer + decimal
+    return ret
+
 # 沟通函数
 def irsim_com(cmd):
     # 打印初始文本
@@ -56,6 +71,34 @@ def get_value_from_string(string, key):
             return value
     return None
 
+def get_value_from_string_16(string, key):
+    """
+    从给定字符串中查找包含给定键的值，并返回该值
+    :param string: 给定的字符串
+    :param key: 要查找的键
+    :return: 包含给定键的值，如果没有找到则返回 None
+    """
+    split_string = string.split(" ")
+    for s in split_string:
+        if key in s:
+            value = s.split("=")[1][:16]
+            return value
+    return None
+
+def get_value_from_string_8(string, key):
+    """
+    从给定字符串中查找包含给定键的值，并返回该值
+    :param string: 给定的字符串
+    :param key: 要查找的键
+    :return: 包含给定键的值，如果没有找到则返回 None
+    """
+    split_string = string.split(" ")
+    for s in split_string:
+        if key in s:
+            value = s.split("=")[1][:8]
+            return value
+    return None
+
 # Qt主界面
 class MainWindow(QMainWindow):
 
@@ -65,7 +108,7 @@ class MainWindow(QMainWindow):
         self.conn = conn
 
         # 设置窗口大小
-        self.setFixedSize(800, 500)
+        self.setFixedSize(1000, 700)
 
         # 设置样式表
         style_sheet = """
@@ -119,6 +162,92 @@ class MainWindow(QMainWindow):
         self.label.setFixedSize(100, 150)  # 设置控件的宽度为200，高度为200
         self.label.move(500,100)
 
+        pixmap = QPixmap('./imgs/1usd.jpeg')
+        pixmap_scaled = pixmap.scaled(200, 100)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(200, 100)  # 设置控件的宽度为200，高度为200
+        self.label.move(650,100)
+
+        self.label1USDLabel = QLabel(self)
+        self.label1USDLabel.setText('1 USD')
+        self.label1USDLabel.setStyleSheet('color: white')
+        self.label1USDLabel.move(650, 200)
+
+        self.Count_1USD = 0
+        self.label1USDCount = QLabel(self)
+        self.label1USDCount.setText(str(self.Count_1USD)+' banknote(s)')
+        self.label1USDCount.setStyleSheet('color: white')
+        self.label1USDCount.move(750, 200)
+
+        pixmap = QPixmap('./imgs/05usd.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 100)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 100)  # 设置控件的宽度为200，高度为200
+        self.label.move(650,250)
+
+        self.label1USDLabel = QLabel(self)
+        self.label1USDLabel.setText('0.5 USD')
+        self.label1USDLabel.setStyleSheet('color: white')
+        self.label1USDLabel.move(650, 350)
+
+        self.Count_05USD = 0
+        self.label05USDCount = QLabel(self)
+        self.label05USDCount.setText(str(self.Count_05USD)+' coin(s)')
+        self.label05USDCount.setStyleSheet('color: white')
+        self.label05USDCount.move(750, 350)
+
+        pixmap = QPixmap('./imgs/025usd.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 100)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 100)  # 设置控件的宽度为200，高度为200
+        self.label.move(650,400)
+
+        self.label025USDLabel = QLabel(self)
+        self.label025USDLabel.setText('0.25 USD')
+        self.label025USDLabel.setStyleSheet('color: white')
+        self.label025USDLabel.move(650, 500)
+
+        self.Count_025USD = 0
+        self.label025USDCount = QLabel(self)
+        self.label025USDCount.setText(str(self.Count_025USD)+' coin(s)')
+        self.label025USDCount.setStyleSheet('color: white')
+        self.label025USDCount.move(750, 500)
+
+        self.buttonGetMoney = QPushButton("Get Money", self)
+        self.buttonGetMoney.move(750, 550)
+        self.buttonGetMoney.clicked.connect(self.on_buttonGetMoney_click)
+
+        self.buttonGetItem = QPushButton("Get Items", self)
+        self.buttonGetItem.move(500, 550)
+        self.buttonGetItem.clicked.connect(self.on_buttonGetItem_click)
+
+        # 吐出
+        self.CountA = 0
+        self.labelSpitA = QLabel(self)
+        self.labelSpitA.setText(str(self.CountA)+ ' 个')
+        self.labelSpitA.setStyleSheet('color: white')
+        self.labelSpitA.move(50, 500)
+
+        self.CountB = 0
+        self.labelSpitB = QLabel(self)
+        self.labelSpitB.setText(str(self.CountA)+ ' 个')
+        self.labelSpitB.setStyleSheet('color: white')
+        self.labelSpitB.move(200, 500)
+
+        self.CountC = 0
+        self.labelSpitC = QLabel(self)
+        self.labelSpitC.setText(str(self.CountA)+ ' 个')
+        self.labelSpitC.setStyleSheet('color: white')
+        self.labelSpitC.move(350, 500)
+
+        self.CountD = 0
+        self.labelSpitD = QLabel(self)
+        self.labelSpitD.setText(str(self.CountA)+ ' 个')
+        self.labelSpitD.setStyleSheet('color: white')
+        self.labelSpitD.move(500, 500)
 
         # 创建按钮并添加到窗口中
         self.buttonA = QPushButton("Item1", self)
@@ -176,7 +305,7 @@ class MainWindow(QMainWindow):
         self.labelA.move(50, 310)
 
         self.labelAText = QLabel(self)
-        self.labelAText.setText('Coca Cola')
+        self.labelAText.setText('Cola $1.75')
         self.labelAText.setStyleSheet('color: white')
         self.labelAText.move(50, 250)
 
@@ -191,7 +320,7 @@ class MainWindow(QMainWindow):
         self.labelB.move(200, 310)
 
         self.labelBText = QLabel(self)
-        self.labelBText.setText('Sprite')
+        self.labelBText.setText('Sprite $1.50')
         self.labelBText.setStyleSheet('color: white')
         self.labelBText.move(200, 250)
 
@@ -206,9 +335,14 @@ class MainWindow(QMainWindow):
         self.labelC.move(350, 310)
 
         self.labelCText = QLabel(self)
-        self.labelCText.setText('Genki')
+        self.labelCText.setText('Genki $1.25')
         self.labelCText.setStyleSheet('color: white')
         self.labelCText.move(350, 250)
+
+        self.labelCStock = QLabel(self)
+        self.labelCStock.setText('Out of Stock')
+        self.labelCStock.setStyleSheet('color: white')
+        self.labelCStock.move(350, 275)
 
         self.labelD = QLabel(self)
         self.labelD.setText('Unselected')
@@ -216,9 +350,22 @@ class MainWindow(QMainWindow):
         self.labelD.move(500, 310)
 
         self.labelDText = QLabel(self)
-        self.labelDText.setText('PQ beans')
+        self.labelDText.setText('PQ B $1.00')
         self.labelDText.setStyleSheet('color: white')
         self.labelDText.move(500, 250)
+
+        self.labelDStock = QLabel(self)
+        self.labelDStock.setText('Out of Stock')
+        self.labelDStock.setStyleSheet('color: white')
+        self.labelDStock.move(500, 275)
+
+        self.labelDeposit = QLabel(self)
+        self.labelDeposit.setText('123')
+        self.labelDeposit.setStyleSheet('color: white')
+        self.labelDeposit.setFixedSize(300, 50)  # 设置控件的宽度为200，高度为200
+        font = QFont("Arial", 20)  # 设置字体为Arial，大小为20
+        self.labelDeposit.setFont(font)
+        self.labelDeposit.move(40, 60)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.read_pipe)
@@ -227,43 +374,79 @@ class MainWindow(QMainWindow):
     def read_pipe(self):
         if self.conn.poll():
             message = self.conn.recv()
-            if message == 'A selected':
-                self.labelA.setText('Selected')
-                self.labelA.setStyleSheet('color: red')
-            elif message == 'A unselected':
-                self.labelA.setText('Unselected')
-                self.labelA.setStyleSheet('color: white')
-            elif message == 'B selected':
-                self.labelB.setText('Selected')
-                self.labelB.setStyleSheet('color: red')
-            elif message == 'B unselected':
-                self.labelB.setText('Unselected')
-                self.labelB.setStyleSheet('color: white')
-            elif message == 'C selected':
-                self.labelC.setText('Selected')
-                self.labelC.setStyleSheet('color: red')
-            elif message == 'C unselected':
-                self.labelC.setText('Unselected')
-                self.labelC.setStyleSheet('color: white')
-            elif message == 'D selected':
-                self.labelD.setText('Selected')
-                self.labelD.setStyleSheet('color: red')
-            elif message == 'D unselected':
-                self.labelD.setText('Unselected')
-                self.labelD.setStyleSheet('color: white')
-            elif message == 'out_stock_a true':
-                self.labelAStock.setText('In Stock')
-                self.labelAStock.setStyleSheet('color: green')
-            elif message == 'out_stock_a flase':
-                self.labelAStock.setText('Out of Stock')
-                self.labelAStock.setStyleSheet('color: white')
-            elif message == 'out_stock_b true':
-                self.labelBStock.setText('In Stock')
-                self.labelBStock.setStyleSheet('color: green')
-            elif message == 'out_stock_b flase':
-                self.labelBStock.setText('Out of Stock')
-                self.labelBStock.setStyleSheet('color: white')
-
+            if isinstance(message, str):
+                if message == 'A selected':
+                    self.labelA.setText('Selected')
+                    self.labelA.setStyleSheet('color: red')
+                elif message == 'A unselected':
+                    self.labelA.setText('Unselected')
+                    self.labelA.setStyleSheet('color: white')
+                elif message == 'B selected':
+                    self.labelB.setText('Selected')
+                    self.labelB.setStyleSheet('color: red')
+                elif message == 'B unselected':
+                    self.labelB.setText('Unselected')
+                    self.labelB.setStyleSheet('color: white')
+                elif message == 'C selected':
+                    self.labelC.setText('Selected')
+                    self.labelC.setStyleSheet('color: red')
+                elif message == 'C unselected':
+                    self.labelC.setText('Unselected')
+                    self.labelC.setStyleSheet('color: white')
+                elif message == 'D selected':
+                    self.labelD.setText('Selected')
+                    self.labelD.setStyleSheet('color: red')
+                elif message == 'D unselected':
+                    self.labelD.setText('Unselected')
+                    self.labelD.setStyleSheet('color: white')
+                elif message == 'out_stock_a true':
+                    self.labelAStock.setText('In Stock')
+                    self.labelAStock.setStyleSheet('color: green')
+                elif message == 'out_stock_a false':
+                    self.labelAStock.setText('Out of Stock')
+                    self.labelAStock.setStyleSheet('color: white')
+                elif message == 'out_stock_b true':
+                    self.labelBStock.setText('In Stock')
+                    self.labelBStock.setStyleSheet('color: green')
+                elif message == 'out_stock_b false':
+                    self.labelBStock.setText('Out of Stock')
+                    self.labelBStock.setStyleSheet('color: white')
+                elif message == 'out_stock_c true':
+                    self.labelCStock.setText('In Stock')
+                    self.labelCStock.setStyleSheet('color: green')
+                elif message == 'out_stock_c false':
+                    self.labelCStock.setText('Out of Stock')
+                    self.labelCStock.setStyleSheet('color: white')
+                elif message == 'out_stock_d true':
+                    self.labelDStock.setText('In Stock')
+                    self.labelDStock.setStyleSheet('color: green')
+                elif message == 'out_stock_d false':
+                    self.labelDStock.setText('Out of Stock')
+                    self.labelDStock.setStyleSheet('color: white')
+                elif message[:7] == 'Deposit':
+                    self.labelDeposit.setText(message)
+                elif message == "05++":
+                    self.Count_05USD = self.Count_05USD + 1
+                    self.label05USDCount.setText(str(self.Count_05USD)+' coin(s)')
+                elif message == "025++":
+                    self.Count_025USD = self.Count_025USD + 1
+                    self.label025USDCount.setText(str(self.Count_025USD)+' coin(s)')
+                elif message == "a++":
+                    self.CountA = self.CountA + 1
+                    self.labelSpitA.setText(str(self.CountA)+' 个')
+                elif message == "b++":
+                    self.CountB = self.CountB + 1
+                    self.labelSpitB.setText(str(self.CountB)+' 个')
+                elif message == "c++":
+                    self.CountC = self.CountC + 1
+                    self.labelSpitC.setText(str(self.CountC)+' 个')
+                elif message == "d++":
+                    self.CountD = self.CountD + 1
+                    self.labelSpitD.setText(str(self.CountD)+' 个')
+            else:
+                print(message)
+                self.Count_1USD = self.Count_1USD + int(message)
+                self.label1USDCount.setText(str(self.Count_1USD)+' banknote(s)')
     def on_buttonA_click(self):
         # 用户点击按钮a时，在主进程中打印一条消息
         self.conn.send('select A')
@@ -304,6 +487,25 @@ class MainWindow(QMainWindow):
         # 用户点击按钮Insert025时，在主进程中打印一条消息
         self.conn.send('0.25 dollor inserted')
 
+    def on_buttonGetMoney_click(self):
+        # 用户点击按钮GetMoney时，在主进程中打印一条消息
+        self.Count_1USD = 0
+        self.Count_05USD = 0
+        self.Count_025USD = 0
+        self.label1USDCount.setText(str(self.Count_1USD)+' coin(s)')
+        self.label05USDCount.setText(str(self.Count_05USD)+' coin(s)')
+        self.label025USDCount.setText(str(self.Count_025USD)+' coin(s)')
+
+    def on_buttonGetItem_click(self):
+        # 用户点击按钮GetMoney时，在主进程中打印一条消息
+        self.CountA = 0
+        self.CountB = 0
+        self.CountC = 0
+        self.CountD = 0
+        self.labelSpitA.setText(str(self.CountA)+ ' 个')
+        self.labelSpitB.setText(str(self.CountB)+ ' 个')
+        self.labelSpitC.setText(str(self.CountC)+ ' 个')
+        self.labelSpitD.setText(str(self.CountD)+ ' 个')
 
 def run_ui(conn):
     # 在子进程中运行 PyQt5 界面
@@ -344,7 +546,7 @@ else:
     fcntl.fcntl(r_process.stdout, fcntl.F_SETFL, os.O_NONBLOCK)
 
     # 创建向量
-    irsim_com('vector change out_change[15] out_change[14] out_change[13] out_change[12] out_change[11] out_change[10] out_change[9] out_change[8] out_change[7] out_change[6] out_change[5] out_change[4] out_change[3] out_change[2] out_change[1] out_change[0]')
+    irsim_com('vector changeTotal out_change[15] out_change[14] out_change[13] out_change[12] out_change[11] out_change[10] out_change[9] out_change[8] out_change[7] out_change[6] out_change[5] out_change[4] out_change[3] out_change[2] out_change[1] out_change[0]')
     irsim_com('vector change_1 out_change_1[7] out_change_1[6] out_change_1[5] out_change_1[4] out_change_1[3] out_change_1[2] out_change_1[1] out_change_1[0]')
     irsim_com('vector state out_state[1] out_state[0]')
     # 添加监视变量
@@ -352,7 +554,7 @@ else:
                     in_next in_finish \
                     out_stock_a out_stock_b out_stock_c out_stock_d \
                     out_csel_a out_csel_b out_csel_c out_csel_d \
-                    change change_1 out_change_05 out_change_025 \
+                    changeTotal change_1 out_change_05 out_change_025 \
                     out_spit_a out_spit_b out_spit_c out_spit_d')
     # 定义时钟信号
     irsim_com('clock in_clka 0 1 0 0')
@@ -379,6 +581,9 @@ else:
     out_csel_d = '0'
     out_stock_a = '0'
     out_stock_b = '0'
+    out_stock_c = '0'
+    out_stock_d = '0'
+    deposit = ''
     while True:
         # 回传商品 a 选中情况给UI
         ret_text = irsim_com_run_valid()
@@ -441,6 +646,76 @@ else:
                 child_conn.send('out_stock_b false')
         out_stock_b = value  
 
+        # 回传商品 c stock 选中情况给UI
+        key = "out_stock_c"
+        value = get_value_from_string(ret_text, key)
+        if value != out_stock_c:
+            if value == '1':
+                child_conn.send('out_stock_c true')
+            else:
+                child_conn.send('out_stock_c false')
+        out_stock_c = value
+
+        # 回传商品 d stock 选中情况给UI
+        key = "out_stock_d"
+        value = get_value_from_string(ret_text, key)
+        if value != out_stock_d:
+            if value == '1':
+                child_conn.send('out_stock_d true')
+            else:
+                child_conn.send('out_stock_d false')
+        out_stock_d = value
+
+        # 回传 change 情况给UI
+        key = "changeTotal"
+        value = get_value_from_string_16(ret_text, key)
+        result = fixed_point_to_decimal(value)
+        signal2send = 'Deposit:' + str(result) + '$'
+        if deposit != signal2send:
+            child_conn.send(signal2send)
+            print(signal2send)
+        deposit = signal2send
+
+        # 回传商品 1usd 退款数额给UI
+        key = "change_1"
+        value = get_value_from_string_8(ret_text, key)
+        if (value != '00000000') and (value != 'XXXXXXXX'):
+            child_conn.send(int(value, 2))
+            print(int(value, 2))
+
+        # 回传商品 0.5usd 退款数额给UI
+        key = "change_05"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('05++')
+
+        # 回传商品 0.25usd 退款数额给UI
+        key = "change_025"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('025++')
+
+        # 回传商品  退款数额给UI
+        key = "out_spit_a"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('a++')
+
+        key = "out_spit_b"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('b++')
+
+        key = "out_spit_c"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('c++')
+
+        key = "out_spit_d"
+        value = get_value_from_string(ret_text, key)
+        if (value != 'X') and (value != '0'):
+            child_conn.send('d++')
+
         if child_conn.poll():
             message = child_conn.recv()
             if message == 'select A':
@@ -467,6 +742,14 @@ else:
             elif message == '0.25 dollor inserted':
                 irsim_com_run('h in_inserted_025')
                 irsim_com_run('l in_inserted_025')
+            elif message == 'Next pressed':
+                irsim_com_run('h in_next')
+                irsim_com_run('l in_next')
+            elif message == 'Finish pressed':
+                irsim_com_run('h in_finish')
+                irsim_com_run('l in_finish')
+
+                
                 
 
     # while True:
