@@ -3,9 +3,11 @@ import fcntl
 import os
 import time
 import sys
+import signal
 from multiprocessing import Pipe
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QPalette, QColor, QPixmap, QFont
 
 # 沟通函数
 def irsim_com(cmd):
@@ -16,12 +18,12 @@ def irsim_com(cmd):
         output = r_process.stdout.readlines()
     for line in output:
         ret  = ret + line.decode()
-        print(ret, end = '')
+        # print(ret, end = '')
 
     # 初始化参数
     # 读取用户输入
     user_input = cmd
-    print(user_input)
+    # print(user_input)
     # 向irsim发送命令
     r_process.stdin.write(user_input.encode())
     r_process.stdin.write(b'\n')
@@ -62,31 +64,161 @@ class MainWindow(QMainWindow):
         # 存储连接对象
         self.conn = conn
 
+        # 设置窗口大小
+        self.setFixedSize(800, 500)
+
+        # 设置样式表
+        style_sheet = """
+            QWidget {
+                background-color: #333;
+                color: #fff;
+            }
+        """
+        self.setStyleSheet(style_sheet)
+
+        # 设置QPalette颜色
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(51, 51, 51))
+        palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+        palette.setColor(QPalette.Base, QColor(35, 35, 35))
+        palette.setColor(QPalette.AlternateBase, QColor(51, 51, 51))
+        palette.setColor(QPalette.ToolTipBase, QColor(255, 255, 255))
+        palette.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
+        palette.setColor(QPalette.Text, QColor(255, 255, 255))
+        palette.setColor(QPalette.Button, QColor(51, 51, 51))
+        palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
+        palette.setColor(QPalette.BrightText, QColor(255, 0, 0))
+        self.setPalette(palette)
+
+        # 创建 Label 用于显示图案
+        pixmap = QPixmap('./imgs/cola.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 150)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 150)  # 设置控件的宽度为200，高度为200
+        self.label.move(50,100)
+
+        pixmap = QPixmap('./imgs/sprite.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 150)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 150)  # 设置控件的宽度为200，高度为200
+        self.label.move(200,100)
+
+        pixmap = QPixmap('./imgs/yuan.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 150)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 150)  # 设置控件的宽度为200，高度为200
+        self.label.move(350,100)
+
+        pixmap = QPixmap('./imgs/pq.jpeg')
+        pixmap_scaled = pixmap.scaled(100, 150)  # 将图片缩放为200x200大小
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap_scaled)
+        self.label.setFixedSize(100, 150)  # 设置控件的宽度为200，高度为200
+        self.label.move(500,100)
+
+
         # 创建按钮并添加到窗口中
         self.buttonA = QPushButton("Item1", self)
-        self.buttonA.move(50, 50)
+        self.buttonA.move(50, 350)
         self.buttonA.clicked.connect(self.on_buttonA_click)
         
         self.buttonB = QPushButton("Item2", self)
-        self.buttonB.move(150, 50)
+        self.buttonB.move(200, 350)
         self.buttonB.clicked.connect(self.on_buttonB_click)
 
         self.buttonC = QPushButton("Item3", self)
-        self.buttonC.move(250, 50)
+        self.buttonC.move(350, 350)
         self.buttonC.clicked.connect(self.on_buttonC_click)
 
         self.buttonD = QPushButton("Item4", self)
-        self.buttonD.move(350, 50)
+        self.buttonD.move(500, 350)
         self.buttonD.clicked.connect(self.on_buttonD_click)
 
-        self.label1 = QLabel(self)
-        self.label1.setText('0')
-        self.label1.move(10, 10)
+        self.buttonNext = QPushButton("Next", self)
+        self.buttonNext.move(50, 450)
+        self.buttonNext.clicked.connect(self.on_buttonNext_click)
 
-        self.label2 = QLabel(self)
-        self.label2.setText('0')
-        self.label2.move(20, 10)
+        self.buttonFinish = QPushButton("Finish", self)
+        self.buttonFinish.move(200, 450)
+        self.buttonFinish.clicked.connect(self.on_buttonFinish_click)
+
+        self.buttonInsert5 = QPushButton("$5", self)
+        self.buttonInsert5.move(50, 400)
+        self.buttonInsert5.clicked.connect(self.on_buttonInsert5_click)
+
+        self.buttonInsert1 = QPushButton("$1", self)
+        self.buttonInsert1.move(200, 400)
+        self.buttonInsert1.clicked.connect(self.on_buttonInsert1_click)
+
+        self.buttonInsert05 = QPushButton("$0.5", self)
+        self.buttonInsert05.move(350, 400)
+        self.buttonInsert05.clicked.connect(self.on_buttonInsert05_click)
+
+        self.buttonInsert025 = QPushButton("$0.25", self)
+        self.buttonInsert025.move(500, 400)
+        self.buttonInsert025.clicked.connect(self.on_buttonInsert025_click)
+
+        # 创建标签并添加到窗口中
+        self.labelTitle = QLabel(self)
+        self.labelTitle.setText('Vending Machine')
+        self.labelTitle.setStyleSheet('color: white')
+        self.labelTitle.setFixedSize(300, 50)  # 设置控件的宽度为200，高度为200
+        font = QFont("Arial", 20)  # 设置字体为Arial，大小为20
+        self.labelTitle.setFont(font)
+        self.labelTitle.move(200, 10)
+
+        self.labelA = QLabel(self)
+        self.labelA.setText('Unselected')
+        self.labelA.setStyleSheet('color: white')
+        self.labelA.move(50, 310)
+
+        self.labelAText = QLabel(self)
+        self.labelAText.setText('Coca Cola')
+        self.labelAText.setStyleSheet('color: white')
+        self.labelAText.move(50, 250)
+
+        self.labelAStock = QLabel(self)
+        self.labelAStock.setText('Out of Stock')
+        self.labelAStock.setStyleSheet('color: white')
+        self.labelAStock.move(50, 275)
+
+        self.labelB = QLabel(self)
+        self.labelB.setText('Unselected')
+        self.labelB.setStyleSheet('color: white')
+        self.labelB.move(200, 310)
+
+        self.labelBText = QLabel(self)
+        self.labelBText.setText('Sprite')
+        self.labelBText.setStyleSheet('color: white')
+        self.labelBText.move(200, 250)
+
+        self.labelBStock = QLabel(self)
+        self.labelBStock.setText('Out of Stock')
+        self.labelBStock.setStyleSheet('color: white')
+        self.labelBStock.move(200, 275)
         
+        self.labelC = QLabel(self)
+        self.labelC.setText('Unselected')
+        self.labelC.setStyleSheet('color: white')
+        self.labelC.move(350, 310)
+
+        self.labelCText = QLabel(self)
+        self.labelCText.setText('Genki')
+        self.labelCText.setStyleSheet('color: white')
+        self.labelCText.move(350, 250)
+
+        self.labelD = QLabel(self)
+        self.labelD.setText('Unselected')
+        self.labelD.setStyleSheet('color: white')
+        self.labelD.move(500, 310)
+
+        self.labelDText = QLabel(self)
+        self.labelDText.setText('PQ beans')
+        self.labelDText.setStyleSheet('color: white')
+        self.labelDText.move(500, 250)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.read_pipe)
@@ -96,34 +228,88 @@ class MainWindow(QMainWindow):
         if self.conn.poll():
             message = self.conn.recv()
             if message == 'A selected':
-                self.label1.setText('1')
+                self.labelA.setText('Selected')
+                self.labelA.setStyleSheet('color: red')
             elif message == 'A unselected':
-                self.label1.setText('0')
+                self.labelA.setText('Unselected')
+                self.labelA.setStyleSheet('color: white')
             elif message == 'B selected':
-                self.label2.setText('1')
+                self.labelB.setText('Selected')
+                self.labelB.setStyleSheet('color: red')
             elif message == 'B unselected':
-                self.label2.setText('0')
+                self.labelB.setText('Unselected')
+                self.labelB.setStyleSheet('color: white')
+            elif message == 'C selected':
+                self.labelC.setText('Selected')
+                self.labelC.setStyleSheet('color: red')
+            elif message == 'C unselected':
+                self.labelC.setText('Unselected')
+                self.labelC.setStyleSheet('color: white')
+            elif message == 'D selected':
+                self.labelD.setText('Selected')
+                self.labelD.setStyleSheet('color: red')
+            elif message == 'D unselected':
+                self.labelD.setText('Unselected')
+                self.labelD.setStyleSheet('color: white')
+            elif message == 'out_stock_a true':
+                self.labelAStock.setText('In Stock')
+                self.labelAStock.setStyleSheet('color: green')
+            elif message == 'out_stock_a flase':
+                self.labelAStock.setText('Out of Stock')
+                self.labelAStock.setStyleSheet('color: white')
+            elif message == 'out_stock_b true':
+                self.labelBStock.setText('In Stock')
+                self.labelBStock.setStyleSheet('color: green')
+            elif message == 'out_stock_b flase':
+                self.labelBStock.setText('Out of Stock')
+                self.labelBStock.setStyleSheet('color: white')
 
     def on_buttonA_click(self):
-        # 用户点击按钮1时，在主进程中打印一条消息
+        # 用户点击按钮a时，在主进程中打印一条消息
         self.conn.send('select A')
 
     def on_buttonB_click(self):
-        # 用户点击按钮2时，在主进程中打印一条消息
+        # 用户点击按钮b时，在主进程中打印一条消息
         self.conn.send('select B')
     
     def on_buttonC_click(self):
-        # 用户点击按钮2时，在主进程中打印一条消息
-        print("1234")
+        # 用户点击按钮c时，在主进程中打印一条消息
+        self.conn.send('select C')
 
     def on_buttonD_click(self):
-        # 用户点击按钮2时，在主进程中打印一条消息
-        print("1234")
+        # 用户点击按钮d时，在主进程中打印一条消息
+        self.conn.send('select D')
+
+    def on_buttonNext_click(self):
+        # 用户点击按钮Next时，在主进程中打印一条消息
+        self.conn.send('Next pressed')
+
+    def on_buttonFinish_click(self):
+        # 用户点击按钮Finish时，在主进程中打印一条消息
+        self.conn.send('Finish pressed')
+
+    def on_buttonInsert5_click(self):
+        # 用户点击按钮Insert5时，在主进程中打印一条消息
+        self.conn.send('5 dollor inserted')
+    
+    def on_buttonInsert1_click(self):
+        # 用户点击按钮Insert1时，在主进程中打印一条消息
+        self.conn.send('1 dollor inserted')
+
+    def on_buttonInsert05_click(self):
+        # 用户点击按钮Insert05时，在主进程中打印一条消息
+        self.conn.send('0.5 dollor inserted')
+
+    def on_buttonInsert025_click(self):
+        # 用户点击按钮Insert025时，在主进程中打印一条消息
+        self.conn.send('0.25 dollor inserted')
 
 
 def run_ui(conn):
     # 在子进程中运行 PyQt5 界面
     app = QApplication(sys.argv)
+    # 设置样式为QFusionStyle
+    app.setStyle('fusion')
     window = MainWindow(conn)
     window.show()
     sys.exit(app.exec_())
@@ -136,122 +322,166 @@ pid = os.fork()
 if pid == 0:
     child_conn.close()
     run_ui(parent_conn)
+else:
+    # 子进程退出时，主进程也退出
+    def sig_handler(signum, frame):
+        # 信号处理函数，调用 os._exit() 退出主进程
+        os._exit(0)
 
-# 指定参数文件和仿真文件
-param_file = 'scmos30.prm'
-sim_file = 'top_module.sim'
-cmd_file = '-padtest.cmd'
+    # 注册 SIGCHLD 信号处理函数
+    signal.signal(signal.SIGCHLD, sig_handler)
 
-# 启动R进程
-r_process = subprocess.Popen(['irsim', param_file, sim_file], 
-stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # 指定参数文件和仿真文件
+    param_file = 'scmos30.prm'
+    sim_file = 'top_module.sim'
+    cmd_file = '-padtest.cmd'
 
-# 将 r_process.stdout 设置为非阻塞式IO
-fcntl.fcntl(r_process.stdout, fcntl.F_SETFL, os.O_NONBLOCK)
+    # 启动R进程
+    r_process = subprocess.Popen(['irsim', param_file, sim_file], 
+    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-# 创建向量
-irsim_com('vector inserted_5 in_inserted_5[7] in_inserted_5[6] in_inserted_5[5] in_inserted_5[4] in_inserted_5[3] in_inserted_5[2] in_inserted_5[1] in_inserted_5[0]')
-irsim_com('vector inserted_1 in_inserted_1[7] in_inserted_1[6] in_inserted_1[5] in_inserted_1[4] in_inserted_1[3] in_inserted_1[2] in_inserted_1[1] in_inserted_1[0]')
-irsim_com('vector inserted_05 in_inserted_05[7] in_inserted_05[6] in_inserted_05[5] in_inserted_05[4] in_inserted_05[3] in_inserted_05[2] in_inserted_05[1] in_inserted_05[0]')
-irsim_com('vector inserted_025 in_inserted_025[7] in_inserted_025[6] in_inserted_025[5] in_inserted_025[4] in_inserted_025[3] in_inserted_025[2] in_inserted_025[1] in_inserted_025[0]')
-irsim_com('vector change out_change[15] out_change[14] out_change[13] out_change[12] out_change[11] out_change[10] out_change[9] out_change[8] out_change[7] out_change[6] out_change[5] out_change[4] out_change[3] out_change[2] out_change[1] out_change[0]')
-irsim_com('vector change_1 out_change_1[7] out_change_1[6] out_change_1[5] out_change_1[4] out_change_1[3] out_change_1[2] out_change_1[1] out_change_1[0]')
-irsim_com('vector state out_state[1] out_state[0]')
-# 添加监视变量
-irsim_com('w    in_clka in_clkb in_restart in_sel_a in_sel_a in_sel_b in_sel_c in_sel_d \
-                in_next in_finish inserted_5 inserted_1 inserted_05 inserted_025 \
-                out_stock_a out_stock_b out_stock_c out_stock_d \
-                out_csel_a out_csel_b out_csel_c out_csel_d \
-                change_1 out_change_05 out_change_025 \
-                out_spit_a out_spit_b out_spit_c out_spit_d')
-# 定义时钟信号
-irsim_com('clock in_clka 0 1 0 0')
-irsim_com('clock in_clkb 0 0 0 1')
-# 初始化参数
-irsim_com('l in_sel_a')
-irsim_com('l in_sel_b')
-irsim_com('l in_sel_c')
-irsim_com('l in_sel_d')
-irsim_com('l in_next')
-irsim_com('l in_finish')
-irsim_com('set inserted_5 00000000')
-irsim_com('set inserted_1 00000000')
-irsim_com('set inserted_05 00000000')
-irsim_com('set inserted_025 00000000')
-# 芯片上电复位
-irsim_com_run('h in_restart')
-irsim_com_run('l in_restart')
+    # 将 r_process.stdout 设置为非阻塞式IO
+    fcntl.fcntl(r_process.stdout, fcntl.F_SETFL, os.O_NONBLOCK)
 
-# 在主进程中循环，接收管道中的消息
-out_csel_a = '0'
-out_csel_b = '0'
-out_csel_c = '0'
-out_csel_d = '0'
-while True:
-    # 回传商品 a 选中情况给UI
-    ret_text = irsim_com_run_valid()
-    key = "out_csel_a"
-    value = get_value_from_string(ret_text, key)
-    if value != out_csel_a:
-        if value == '1':
-            child_conn.send('A selected')
-        else:
-            child_conn.send('A unselected')
-    out_csel_a = value
+    # 创建向量
+    irsim_com('vector change out_change[15] out_change[14] out_change[13] out_change[12] out_change[11] out_change[10] out_change[9] out_change[8] out_change[7] out_change[6] out_change[5] out_change[4] out_change[3] out_change[2] out_change[1] out_change[0]')
+    irsim_com('vector change_1 out_change_1[7] out_change_1[6] out_change_1[5] out_change_1[4] out_change_1[3] out_change_1[2] out_change_1[1] out_change_1[0]')
+    irsim_com('vector state out_state[1] out_state[0]')
+    # 添加监视变量
+    irsim_com('w    in_restart in_sel_a in_sel_a in_sel_b in_sel_c in_sel_d \
+                    in_next in_finish \
+                    out_stock_a out_stock_b out_stock_c out_stock_d \
+                    out_csel_a out_csel_b out_csel_c out_csel_d \
+                    change change_1 out_change_05 out_change_025 \
+                    out_spit_a out_spit_b out_spit_c out_spit_d')
+    # 定义时钟信号
+    irsim_com('clock in_clka 0 1 0 0')
+    irsim_com('clock in_clkb 0 0 0 1')
+    # 初始化参数
+    irsim_com('l in_sel_a')
+    irsim_com('l in_sel_b')
+    irsim_com('l in_sel_c')
+    irsim_com('l in_sel_d')
+    irsim_com('l in_next')
+    irsim_com('l in_finish')
+    irsim_com('l in_inserted_5')
+    irsim_com('l in_inserted_1')
+    irsim_com('l in_inserted_05')
+    irsim_com('l in_inserted_025')
+    # 芯片上电复位
+    irsim_com_run('h in_restart')
+    irsim_com_run('l in_restart')
 
-    # 回传商品 b 选中情况给UI
-    key = "out_csel_b"
-    value = get_value_from_string(ret_text, key)
-    if value != out_csel_b:
-        if value == '1':
-            child_conn.send('B selected')
-        else:
-            child_conn.send('B unselected')
-    out_csel_b = value
+    # 在主进程中循环，接收管道中的消息
+    out_csel_a = '0'
+    out_csel_b = '0'
+    out_csel_c = '0'
+    out_csel_d = '0'
+    out_stock_a = '0'
+    out_stock_b = '0'
+    while True:
+        # 回传商品 a 选中情况给UI
+        ret_text = irsim_com_run_valid()
+        key = "out_csel_a"
+        value = get_value_from_string(ret_text, key)
+        if value != out_csel_a:
+            if value == '1':
+                child_conn.send('A selected')
+            else:
+                child_conn.send('A unselected')
+        out_csel_a = value
 
-    # 回传商品 c 选中情况给UI
-    key = "out_csel_c"
-    value = get_value_from_string(ret_text, key)
-    if value != out_csel_c:
-        if value == '1':
-            child_conn.send('C selected')
-        else:
-            child_conn.send('C unselected')
-    out_csel_c = value
- 
-    # 回传商品 d 选中情况给UI
-    key = "out_csel_d"
-    value = get_value_from_string(ret_text, key)
-    if value != out_csel_d:
-        if value == '1':
-            child_conn.send('D selected')
-        else:
-            child_conn.send('D unselected')
-    out_csel_d = value  
+        # 回传商品 b 选中情况给UI
+        key = "out_csel_b"
+        value = get_value_from_string(ret_text, key)
+        if value != out_csel_b:
+            if value == '1':
+                child_conn.send('B selected')
+            else:
+                child_conn.send('B unselected')
+        out_csel_b = value
 
-    if child_conn.poll():
-        message = child_conn.recv()
-        if message == 'select A':
-            irsim_com_run('h in_sel_a')
-            irsim_com_run('l in_sel_a')
-        elif message == 'select B':
-            irsim_com_run('h in_sel_b')
-            irsim_com_run('l in_sel_b')
-            
+        # 回传商品 c 选中情况给UI
+        key = "out_csel_c"
+        value = get_value_from_string(ret_text, key)
+        if value != out_csel_c:
+            if value == '1':
+                child_conn.send('C selected')
+            else:
+                child_conn.send('C unselected')
+        out_csel_c = value
+    
+        # 回传商品 d 选中情况给UI
+        key = "out_csel_d"
+        value = get_value_from_string(ret_text, key)
+        if value != out_csel_d:
+            if value == '1':
+                child_conn.send('D selected')
+            else:
+                child_conn.send('D unselected')
+        out_csel_d = value
 
-# while True:
-#     # 读取irsim输出并打印到控制台
-#     output = []
-#     while(output == []):
-#         output = r_process.stdout.readlines()
-#     for line in output:
-#         print(line.decode(), end = '')
+        # 回传商品 a stock 选中情况给UI
+        key = "out_stock_a"
+        value = get_value_from_string(ret_text, key)
+        if value != out_stock_a:
+            if value == '1':
+                child_conn.send('out_stock_a true')
+            else:
+                child_conn.send('out_stock_a false')
+        out_stock_a = value
 
-#     # 读取用户输入
-#     user_input = 'c'
-#     print(user_input)
+        # 回传商品 b stock 选中情况给UI
+        key = "out_stock_b"
+        value = get_value_from_string(ret_text, key)
+        if value != out_stock_b:
+            if value == '1':
+                child_conn.send('out_stock_b true')
+            else:
+                child_conn.send('out_stock_b false')
+        out_stock_b = value  
 
-#     # 向irsim发送命令
-#     r_process.stdin.write(user_input.encode())
-#     r_process.stdin.write(b'\n')
-#     r_process.stdin.flush()
+        if child_conn.poll():
+            message = child_conn.recv()
+            if message == 'select A':
+                irsim_com_run('h in_sel_a')
+                irsim_com_run('l in_sel_a')
+            elif message == 'select B':
+                irsim_com_run('h in_sel_b')
+                irsim_com_run('l in_sel_b')
+            elif message == 'select C':
+                irsim_com_run('h in_sel_c')
+                irsim_com_run('l in_sel_c')
+            elif message == 'select D':
+                irsim_com_run('h in_sel_d')
+                irsim_com_run('l in_sel_d')
+            elif message == '5 dollor inserted':
+                irsim_com_run('h in_inserted_5')
+                irsim_com_run('l in_inserted_5')
+            elif message == '1 dollor inserted':
+                irsim_com_run('h in_inserted_1')
+                irsim_com_run('l in_inserted_1')
+            elif message == '0.5 dollor inserted':
+                irsim_com_run('h in_inserted_05')
+                irsim_com_run('l in_inserted_05')
+            elif message == '0.25 dollor inserted':
+                irsim_com_run('h in_inserted_025')
+                irsim_com_run('l in_inserted_025')
+                
+
+    # while True:
+    #     # 读取irsim输出并打印到控制台
+    #     output = []
+    #     while(output == []):
+    #         output = r_process.stdout.readlines()
+    #     for line in output:
+    #         print(line.decode(), end = '')
+
+    #     # 读取用户输入
+    #     user_input = 'c'
+    #     print(user_input)
+
+    #     # 向irsim发送命令
+    #     r_process.stdin.write(user_input.encode())
+    #     r_process.stdin.write(b'\n')
+    #     r_process.stdin.flush()
