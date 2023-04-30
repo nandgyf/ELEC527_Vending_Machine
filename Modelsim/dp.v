@@ -6,11 +6,12 @@ out_stock_a,   out_stock_b,   out_stock_c,   out_stock_d,
 out_csel_a,    out_csel_b,    out_csel_c,    out_csel_d,
 out_spit_a,    out_spit_b,    out_spit_c,    out_spit_d,
 out_change,
-out_change_1, out_change_05, out_change_025
+out_change_1, out_change_05, out_change_025, out_sol_ok
 );
 //-------------Internal Constants--------------------------
 parameter SITEM_CMD = 2'b00, SMONEY_CMD = 2'b01, CLEAR_CMD = 2'b10, START_CMD = 2'b11;
 parameter ITEM_PRICE_A = 16'b1110, ITEM_PRICE_B = 16'b1100, ITEM_PRICE_C = 16'b1010, ITEM_PRICE_D = 16'b1000;
+parameter DOLLAR_1_NUM = 8'b10, DOLLAR_05_NUM = 8'b10, DOLLAR_025_NUM = 8'b00;
 //-----------Input Ports---------------
 input wire in_clka, in_clkb, in_restart;
 // Commands from FSM
@@ -47,6 +48,8 @@ output reg out_spit_a;
 output reg out_spit_b;
 output reg out_spit_c;
 output reg out_spit_d;
+// Show change solutions
+output wire out_sol_ok;
 //-----------Internout_al Variables-----
 // The available numbers of items
 reg [7:0] item_a_num;
@@ -56,6 +59,13 @@ reg [7:0] item_d_num;
 // The Total price of the selected items
 wire  [15:0] total_price;
 reg  [15:0] inserted_money;
+// The amount of banknotes and coins
+reg [7:0] dollar_1_num;
+reg [7:0] dollar_05_num;
+reg [7:0] dollar_025_num;
+wire [7:0] out_change_1_sol1;
+wire out_change_05_sol1;
+wire out_change_025_sol1;
 //-------------Code Starts Here---------
 assign out_stock_a = (item_a_num == 0) ? 0 : 1;
 assign out_stock_b = (item_b_num == 0) ? 0 : 1;
@@ -65,6 +75,11 @@ assign out_stock_d = (item_d_num == 0) ? 0 : 1;
 assign total_price = (in_cmd == CLEAR_CMD)?0:((out_csel_a ? ITEM_PRICE_A:0)+(out_csel_b ? ITEM_PRICE_B:0)+(out_csel_c ? ITEM_PRICE_C:0)+(out_csel_d ? ITEM_PRICE_D:0));
 assign out_change = (in_cmd == CLEAR_CMD)?0:(inserted_money - total_price);
 
+assign out_change_1_sol1 = out_change[15] ? 0:out_change[15:3];
+assign out_change_05_sol1 = out_change[15] ? 0:out_change[2];
+assign out_change_025_sol1 = out_change[15] ? 0:out_change[1];
+
+assign out_sol_ok = (dollar_1_num>=out_change_1_sol1)&&(dollar_05_num>=out_change_05_sol1)&&(dollar_025_num>=out_change_025_sol1);
 
 always @ (negedge in_clka)
 begin
@@ -83,6 +98,9 @@ begin
       out_spit_c <= 0;
       out_spit_d <= 0;
       inserted_money <= 0;
+      dollar_1_num <= DOLLAR_1_NUM;
+      dollar_05_num <= DOLLAR_05_NUM;
+      dollar_025_num <= DOLLAR_025_NUM;
    end else if (in_cmd == START_CMD) begin
       if (in_sel_a)
          out_csel_a <= (!out_stock_a) ? 0 : !out_csel_a;
@@ -104,6 +122,9 @@ begin
                         (in_inserted_1<<3) + 
                         (in_inserted_05<<2) + 
                         (in_inserted_025<<1);
+      dollar_1_num <= dollar_1_num + in_inserted_1;
+      dollar_05_num <= dollar_05_num + in_inserted_05;
+      dollar_025_num <= dollar_025_num + in_inserted_025;
       out_change_1 <= 0;
       out_change_05 <= 0;
       out_change_025 <= 0;
@@ -112,7 +133,7 @@ begin
       out_spit_c <= 0;
       out_spit_d <= 0;
    end else if (in_cmd == SITEM_CMD) begin
-      if(inserted_money>total_price) begin
+      if((inserted_money>=total_price)&&(out_sol_ok)) begin
          inserted_money <= inserted_money - total_price;
          out_spit_a <= out_csel_a;
          out_spit_b <= out_csel_b;
@@ -126,8 +147,10 @@ begin
          item_b_num <= item_b_num - out_csel_b;
          item_c_num <= item_c_num - out_csel_c;
          item_d_num <= item_d_num - out_csel_d;
-         end
+      end
    end else if (in_cmd == SMONEY_CMD) begin
+      if((inserted_money>=total_price)&&(out_sol_ok)) begin
+         inserted_money <= 0;
          out_spit_a <= out_csel_a;
          out_spit_b <= out_csel_b;
          out_spit_c <= out_csel_c;
@@ -140,11 +163,30 @@ begin
          item_b_num <= item_b_num - out_csel_b;
          item_c_num <= item_c_num - out_csel_c;
          item_d_num <= item_d_num - out_csel_d;
-         inserted_money <= 0;
-         out_change_1 <= out_change[15] ? 0:out_change[15:3];
-         out_change_05 <= out_change[2];
-         out_change_025 <= out_change[1];
+
+         out_change_1 <= out_sol_ok?out_change_1_sol1:inserted_money[15:3];
+         out_change_05 <= out_sol_ok?out_change_05_sol1:inserted_money[2];
+         out_change_025 <= out_sol_ok?out_change_025_sol1:inserted_money[1];
+
+         dollar_1_num <= dollar_1_num - out_sol_ok?out_change_1_sol1:inserted_money[15:3];
+         dollar_05_num <= dollar_05_num - out_sol_ok?out_change_05_sol1:inserted_money[2];
+         dollar_025_num <= dollar_025_num - out_sol_ok?out_change_025_sol1:inserted_money[1];
       end
+      else begin
+         inserted_money <= 0;
+         out_csel_a <= 0;
+         out_csel_b <= 0;
+         out_csel_c <= 0;
+         out_csel_d <= 0;
+         out_change_1 <= inserted_money[15:3];
+         out_change_05 <= inserted_money[2];
+         out_change_025 <= inserted_money[1];
+
+         dollar_1_num <= dollar_1_num - inserted_money[15:3];
+         dollar_05_num <= dollar_05_num - inserted_money[2];
+         dollar_025_num <= dollar_025_num -   inserted_money[1];
+      end
+   end
    end
 
 endmodule //End Of Module dp  datapath

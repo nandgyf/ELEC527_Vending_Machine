@@ -31,6 +31,7 @@ wire out_spit_b;
 wire out_spit_c;
 wire out_spit_d;
 wire [1:0] out_state;
+wire out_sol_ok;
 
 top_module top_dut(
 	.in_clka					(in_clka),
@@ -63,7 +64,8 @@ top_module top_dut(
 	.out_spit_b					(out_spit_b),
 	.out_spit_c					(out_spit_c),
 	.out_spit_d					(out_spit_d),
-	.out_state					(out_state)
+	.out_state					(out_state),
+	.out_sol_ok					(out_sol_ok)
 );
 
 initial

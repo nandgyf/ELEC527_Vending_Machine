@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : top_module
 Version: N-2017.09-SP2
-Date   : Mon Apr 17 00:49:02 2023
+Date   : Sat Apr 29 20:27:00 2023
 ****************************************
 
 Operating Conditions: typical   Library: osu05_stdcells
@@ -14,39 +14,45 @@ Wire Load Model Mode: top
 
   Startpoint: dp_dut/out_csel_a_reg
               (falling edge-triggered flip-flop)
-  Endpoint: out_change[15]
-            (output port clocked by vclk)
+  Endpoint: out_sol_ok (output port clocked by vclk)
   Path Group: (none)
   Path Type: max
 
   Point                                                   Incr       Path
   --------------------------------------------------------------------------
   dp_dut/out_csel_a_reg/CLK (DFFNEGX1)                    0.00       0.00 f
-  dp_dut/out_csel_a_reg/Q (DFFNEGX1)                      0.77       0.77 f
-  U10/Y (AND2X2)                                          0.39       1.17 f
-  dp_dut/dp_cluster_1/add_2_root_add_65_3/U1_3/YS (FAX1)
-                                                          0.61       1.78 f
-  dp_dut/dp_cluster_1/add_0_root_add_65_3/U1_3/YC (FAX1)
-                                                          0.46       2.24 f
-  dp_dut/dp_cluster_1/add_0_root_add_65_3/U1_4/YS (FAX1)
-                                                          0.40       2.64 f
-  dp_dut/U5/Y (AND2X2)                                    0.23       2.87 f
-  U209/Y (INVX2)                                          0.18       3.04 r
-  dp_dut/r389/U2_4/YC (FAX1)                              0.37       3.42 r
-  dp_dut/r389/U2_5/YC (FAX1)                              0.38       3.80 r
-  U135/Y (OR2X1)                                          0.37       4.17 r
-  U69/Y (OR2X1)                                           0.36       4.53 r
-  U71/Y (OR2X1)                                           0.36       4.89 r
-  U73/Y (OR2X1)                                           0.36       5.25 r
-  U58/Y (OR2X1)                                           0.36       5.62 r
-  U60/Y (OR2X1)                                           0.36       5.98 r
-  U62/Y (OR2X1)                                           0.36       6.34 r
-  U64/Y (OR2X1)                                           0.36       6.71 r
-  U66/Y (OR2X1)                                           0.33       7.04 r
-  U68/Y (XNOR2X1)                                         0.24       7.28 f
-  dp_dut/U23/Y (AND2X2)                                   0.21       7.49 f
-  out_change[15] (out)                                    0.00       7.49 f
-  data arrival time                                                  7.49
+  dp_dut/out_csel_a_reg/Q (DFFNEGX1)                      0.75       0.75 f
+  U16/Y (AND2X2)                                          0.39       1.14 f
+  dp_dut/dp_cluster_1/add_2_root_add_75_3/U1_3/YS (FAX1)
+                                                          0.61       1.75 f
+  dp_dut/dp_cluster_1/add_0_root_add_75_3/U1_3/YS (FAX1)
+                                                          0.40       2.15 f
+  U10/Y (NAND2X1)                                         0.57       2.72 r
+  dp_dut/sub_76/U2_3/YC (FAX1)                            0.43       3.15 r
+  dp_dut/sub_76/U2_4/YC (FAX1)                            0.38       3.53 r
+  dp_dut/sub_76/U2_5/YC (FAX1)                            0.38       3.91 r
+  U262/Y (OR2X1)                                          0.37       4.28 r
+  U102/Y (OR2X1)                                          0.36       4.64 r
+  U104/Y (OR2X1)                                          0.36       5.01 r
+  U106/Y (OR2X1)                                          0.36       5.37 r
+  U91/Y (OR2X1)                                           0.36       5.73 r
+  U93/Y (OR2X1)                                           0.36       6.10 r
+  U95/Y (OR2X1)                                           0.36       6.46 r
+  U97/Y (OR2X1)                                           0.36       6.82 r
+  U99/Y (OR2X1)                                           0.33       7.15 r
+  U101/Y (XNOR2X1)                                        0.19       7.35 f
+  dp_dut/U401/Y (NAND2X1)                                 0.53       7.87 r
+  dp_dut/U226/Y (NAND2X1)                                 0.18       8.05 f
+  U364/Y (INVX2)                                          0.17       8.23 r
+  U480/Y (NAND2X1)                                        0.11       8.34 f
+  U481/Y (NAND3X1)                                        0.17       8.50 r
+  U482/Y (OAI21X1)                                        0.16       8.66 f
+  U487/Y (OAI21X1)                                        0.15       8.81 r
+  U497/Y (OAI21X1)                                        0.12       8.93 f
+  dp_dut/U434/Y (NAND3X1)                                 0.60       9.53 r
+  U358/Y (INVX2)                                          0.09       9.63 f
+  out_sol_ok (out)                                        0.00       9.63 f
+  data arrival time                                                  9.63
   --------------------------------------------------------------------------
   (Path is unconstrained)
 

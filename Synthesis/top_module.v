@@ -28,7 +28,8 @@ module top_module (
   out_spit_b,
   out_spit_c,
   out_spit_d,
-  out_state
+  out_state,
+  out_sol_ok
 );
 wire [1:0] cmd;
 
@@ -72,6 +73,8 @@ output wire out_spit_c;
 output wire out_spit_d;
 output wire [1:0] out_state;
 
+output wire out_sol_ok;
+
 main_FSM main_FSM_dut (
   .in_clka (in_clka ),
   .in_clkb ( in_clkb ),
@@ -110,7 +113,8 @@ dp dp_dut (
   .out_spit_a (out_spit_a ),
   .out_spit_b (out_spit_b ),
   .out_spit_c (out_spit_c ),
-  .out_spit_d (out_spit_d)
+  .out_spit_d (out_spit_d),
+  .out_sol_ok (out_sol_ok)
 );
 
 

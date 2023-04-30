@@ -12,7 +12,64 @@
 # //  18 U.S.C. Section 1905.
 # //
 # vsim -debugDB -voptargs=""+acc"" top_module_tb 
-# Start time: 17:39:49 on Apr 16,2023
+# Start time: 12:12:51 on Apr 29,2023
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vsim-8611) Generating debug db.
+# Loading work.top_module_tb(fast)
+# Loading work.top_module(fast)
+# Loading work.main_FSM(fast)
+# Loading work.dp(fast)
+# ** Note: (vsim-8900) Creating design debug database vsim.dbg.
+wave -r /*
+# unknown or ambiguous subcommand "-r": must be activecursor, addcursor, clipboard, collapse, configcursor, create, cursor, cursorconfig, cursortime, deletecursor, edit, editwrite, expand, export, exportvcd, group, guiObjGetUPFInfo, guiObjHasUPFInfo, import, interrupt, map, modify, overlay, pah, positioncursor, refresh, seecursor, seetime, sort, ungroup, write, zoom, zoomcursor, zoomfull, zoomin, zoomlast, zoomout, or zoomrange
+add wave -r /*
+run -all
+# ** Note: $stop    : test_top.v(363)
+#    Time: 680 ns  Iteration: 0  Instance: /top_module_tb
+# Break in Module top_module_tb at test_top.v line 363
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/dp.v
+# Model Technology ModelSim SE-64 vlog 10.7 Compiler 2017.12 Dec  6 2017
+# Start time: 12:20:11 on Apr 29,2023
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/dp.v 
+# -- Compiling module dp
+# 
+# Top level modules:
+# 	dp
+# End time: 12:20:11 on Apr 29,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/main_FSM.v
+# Model Technology ModelSim SE-64 vlog 10.7 Compiler 2017.12 Dec  6 2017
+# Start time: 12:20:11 on Apr 29,2023
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/main_FSM.v 
+# -- Compiling module main_FSM
+# 
+# Top level modules:
+# 	main_FSM
+# End time: 12:20:11 on Apr 29,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/top_module.v
+# Model Technology ModelSim SE-64 vlog 10.7 Compiler 2017.12 Dec  6 2017
+# Start time: 12:20:11 on Apr 29,2023
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/top_module.v 
+# -- Compiling module top_module
+# 
+# Top level modules:
+# 	top_module
+# End time: 12:20:11 on Apr 29,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/test_top.v
+# Model Technology ModelSim SE-64 vlog 10.7 Compiler 2017.12 Dec  6 2017
+# Start time: 12:20:11 on Apr 29,2023
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /storage-home/y/yg77/527VM/Modelsim/test_top.v 
+# -- Compiling module top_module_tb
+# 
+# Top level modules:
+# 	top_module_tb
+# End time: 12:20:11 on Apr 29,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+add wave -r /*
+restart
+# Closing VCD file "top_module_tb.vcd"
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
 # ** Note: (vsim-8611) Generating debug db.
 # Loading work.top_module_tb(fast)
@@ -20,10 +77,9 @@
 # Loading work.main_FSM(fast)
 # Loading work.dp(fast)
 # ** Note: (vsim-8900) Creating design debug database vsim.dbg.
-add wave -r /*
 run -all
-# ** Note: $stop    : test_top.v(363)
+# ** Note: $stop    : /storage-home/y/yg77/527VM/Modelsim/test_top.v(363)
 #    Time: 680 ns  Iteration: 0  Instance: /top_module_tb
-# Break in Module top_module_tb at test_top.v line 363
-# End time: 17:40:16 on Apr 16,2023, Elapsed time: 0:00:27
-# Errors: 0, Warnings: 0
+# Break in Module top_module_tb at /storage-home/y/yg77/527VM/Modelsim/test_top.v line 363
+# End time: 12:20:52 on Apr 29,2023, Elapsed time: 0:08:01
+# Errors: 1, Warnings: 0

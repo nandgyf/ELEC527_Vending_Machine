@@ -249,6 +249,13 @@ class MainWindow(QMainWindow):
         self.labelSpitD.setStyleSheet('color: white')
         self.labelSpitD.move(500, 500)
 
+        # 找零情
+        self.labelChange = QLabel(self)
+        self.labelChange.setText('Out of Money')
+        self.labelChange.setStyleSheet('color: red')
+        self.labelChange.move(650, 70)
+        self.labelChange.setFixedSize(300, 20)  # 设置控件的宽度为200，高度为200
+
         # 创建按钮并添加到窗口中
         self.buttonA = QPushButton("Item1", self)
         self.buttonA.move(50, 350)
@@ -443,6 +450,12 @@ class MainWindow(QMainWindow):
                 elif message == "d++":
                     self.CountD = self.CountD + 1
                     self.labelSpitD.setText(str(self.CountD)+' 个')
+                elif message == "change no":
+                    self.labelChange.setText('Out of Money')
+                    self.labelChange.setStyleSheet('color: red')
+                elif message == "change ok":
+                    self.labelChange.setText('Ready for Change')
+                    self.labelChange.setStyleSheet('color: green')
             else:
                 print(message)
                 self.Count_1USD = self.Count_1USD + int(message)
@@ -555,7 +568,7 @@ else:
                     out_stock_a out_stock_b out_stock_c out_stock_d \
                     out_csel_a out_csel_b out_csel_c out_csel_d \
                     changeTotal change_1 out_change_05 out_change_025 \
-                    out_spit_a out_spit_b out_spit_c out_spit_d')
+                    out_spit_a out_spit_b out_spit_c out_spit_d out_sol_ok')
     # 定义时钟信号
     irsim_com('clock in_clka 0 1 0 0')
     irsim_com('clock in_clkb 0 0 0 1')
@@ -583,8 +596,20 @@ else:
     out_stock_b = '0'
     out_stock_c = '0'
     out_stock_d = '0'
+    out_sol_ok = '0'
     deposit = ''
     while True:
+        # 回传找零情况
+        ret_text = irsim_com_run_valid()
+        key = "out_sol_ok"
+        value = get_value_from_string(ret_text, key)
+        if value != out_sol_ok:
+            if value == '0':
+                child_conn.send('change no')
+            else:
+                child_conn.send('change ok')
+        out_sol_ok = value
+
         # 回传商品 a 选中情况给UI
         ret_text = irsim_com_run_valid()
         key = "out_csel_a"

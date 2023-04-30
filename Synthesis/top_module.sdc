@@ -1,6 +1,6 @@
 ###################################################################
 
-# Created by write_sdc on Mon Apr 17 00:49:02 2023
+# Created by write_sdc on Sat Apr 29 20:27:00 2023
 
 ###################################################################
 set sdc_version 2.0
@@ -73,3 +73,4 @@ set_output_delay -clock vclk  1  [get_ports out_spit_c]
 set_output_delay -clock vclk  1  [get_ports out_spit_d]
 set_output_delay -clock vclk  1  [get_ports {out_state[1]}]
 set_output_delay -clock vclk  1  [get_ports {out_state[0]}]
+set_output_delay -clock vclk  1  [get_ports out_sol_ok]
