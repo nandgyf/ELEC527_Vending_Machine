@@ -611,7 +611,6 @@ else:
         out_sol_ok = value
 
         # 回传商品 a 选中情况给UI
-        ret_text = irsim_com_run_valid()
         key = "out_csel_a"
         value = get_value_from_string(ret_text, key)
         if value != out_csel_a:
