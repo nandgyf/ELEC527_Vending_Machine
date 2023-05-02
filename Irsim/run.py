@@ -33,7 +33,7 @@ def irsim_com(cmd):
         output = r_process.stdout.readlines()
     for line in output:
         ret  = ret + line.decode()
-        # print(ret, end = '')
+        print(ret, end = '')
 
     # 初始化参数
     # 读取用户输入

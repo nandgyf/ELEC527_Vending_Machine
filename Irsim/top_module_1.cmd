@@ -25,6 +25,7 @@ logfile twoP_FSM.log
  ana out_csel_a out_csel_b out_csel_c out_csel_d
  ana change_1 out_change_05 out_change_025
  ana out_spit_a out_spit_b out_spit_c out_spit_d
+ ana out_sol_ok
 
 V   in_restart              1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 V   in_sel_a                0	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0
@@ -42,4 +43,3 @@ V   in_inserted_025         0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 clock in_clka 0 1 0 0
 clock in_clkb 0 0 0 1
 R
-
